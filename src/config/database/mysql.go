@@ -2,6 +2,7 @@ package database
 
 import (
 	"BE-1/src/config/env"
+	"BE-1/src/model"
 	"log"
 
 	"gorm.io/driver/mysql"
@@ -24,5 +25,9 @@ func InitMySQL() *gorm.DB {
 }
 
 func MigrateMySQL() {
-	InitMySQL().AutoMigrate()
+	InitMySQL().AutoMigrate(
+		&model.Provinsi{},
+		&model.KabKota{},
+		&model.Prodi{},
+	)
 }
