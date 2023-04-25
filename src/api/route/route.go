@@ -27,5 +27,8 @@ func InitServer() *echo.Echo {
 	kabKota := v1.Group("/kab-kota")
 	kabKota.GET("/provinsi/:id", handler.GetAllKabKotaByProvinsi)
 
+	prodi := v1.Group("/prodi")
+	prodi.GET("", handler.GetAllProdiHandler)
+
 	return app
 }
