@@ -1,6 +1,7 @@
 package route
 
 import (
+	"BE-1/src/api/handler"
 	"BE-1/src/util/validation"
 
 	"github.com/go-playground/validator/v10"
@@ -17,6 +18,11 @@ func InitServer() *echo.Echo {
 	app.GET("", func(c echo.Context) error {
 		return c.JSON(200, "Welcome to IKU 1 API")
 	})
+
+	v1 := app.Group("/api/v1")
+
+	provinsi := v1.Group("/provinsi")
+	provinsi.GET("", handler.GetAllProvinsiHandler)
 
 	return app
 }
