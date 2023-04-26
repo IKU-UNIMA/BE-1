@@ -9,5 +9,6 @@ type Alumni struct {
 	Hp         string `gorm:"type:varchar(20);unique"`
 	TahunLulus uint   `gorm:"type:smallint"`
 	Npwp       string `gorm:"type:varchar(255);unique"`
+	Nik        int    `gorm:"unique"`
 	Prodi      Prodi  `gorm:"foreignKey:IdProdi"`
 }
