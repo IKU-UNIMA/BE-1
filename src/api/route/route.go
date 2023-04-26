@@ -4,6 +4,8 @@ import (
 	"BE-1/src/api/handler"
 	"BE-1/src/util/validation"
 
+	customMiddleware "BE-1/src/api/middleware"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -29,6 +31,12 @@ func InitServer() *echo.Echo {
 
 	prodi := v1.Group("/prodi")
 	prodi.GET("", handler.GetAllProdiHandler)
+
+	akun := v1.Group("/akun")
+	akun.POST("/login", handler.LoginHandler)
+	akun.POST("/register/alumni/check", handler.CheckNIMHandler)
+	akun.POST("/register/alumni", handler.RegisterAlumniHandler)
+	akun.PATCH("/password/change", handler.ChangePasswordHandler, customMiddleware.Authentication)
 
 	return app
 }
