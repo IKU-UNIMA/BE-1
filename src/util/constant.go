@@ -7,4 +7,9 @@ const (
 	// database error
 	UNIQUE_ERROR    = "1062"
 	NOT_FOUND_ERROR = "record not found"
+
+	// role
+	REKTOR = "rektor"
+	ADMIN  = "admin"
+	ALUMNI = "alumni"
 )
