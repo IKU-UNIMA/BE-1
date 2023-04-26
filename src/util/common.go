@@ -3,6 +3,7 @@ package util
 import (
 	"strconv"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 )
 
@@ -13,4 +14,9 @@ func GetId(c echo.Context) (int, string) {
 	}
 
 	return id, ""
+}
+
+func GetClaimsFromContext(c echo.Context) jwt.MapClaims {
+	claims := c.Get("claims")
+	return claims.(jwt.MapClaims)
 }
