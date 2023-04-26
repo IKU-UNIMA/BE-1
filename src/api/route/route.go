@@ -38,5 +38,12 @@ func InitServer() *echo.Echo {
 	akun.POST("/register/alumni", handler.RegisterAlumniHandler)
 	akun.PATCH("/password/change", handler.ChangePasswordHandler, customMiddleware.Authentication)
 
+	admin := v1.Group("/admin", customMiddleware.Authentication, customMiddleware.GrantAdminUmum)
+	admin.GET("", handler.GetAllAdminHandler)
+	admin.GET("/:id", handler.GetAdminByIdHandler)
+	admin.POST("", handler.InsertAdminHandler)
+	admin.PUT("/:id", handler.EditAdminHandler)
+	admin.DELETE("/:id", handler.DeleteAdminHandler)
+
 	return app
 }
