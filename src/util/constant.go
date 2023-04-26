@@ -12,4 +12,8 @@ const (
 	REKTOR = "rektor"
 	ADMIN  = "admin"
 	ALUMNI = "alumni"
+
+	// bagian
+	UMUM = "UMUM"
+	IKU1 = "IKU 1"
 )
