@@ -29,9 +29,9 @@ func MigrateMySQL() {
 		&model.Provinsi{},
 		&model.KabKota{},
 		&model.Prodi{},
+		&model.Alumni{},
 		&model.Akun{},
 		&model.Admin{},
-		&model.Alumni{},
 		&model.Rektor{},
 	)
 }
