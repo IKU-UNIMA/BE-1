@@ -172,7 +172,6 @@ func ImportAlumniHandler(c echo.Context) error {
 func InsertAlumniHandler(c echo.Context) error {
 	req := &request.InsertAlumni{}
 	db := database.InitMySQL()
-	tx := db.Begin()
 	ctx := c.Request().Context()
 
 	if err := c.Bind(req); err != nil {
@@ -183,13 +182,8 @@ func InsertAlumniHandler(c echo.Context) error {
 		return err
 	}
 
-	if err := tx.WithContext(ctx).Omit("Akun.Email", "Akun.Password").Create(req.MapRequest()).Error; err != nil {
-		tx.Rollback()
+	if err := db.WithContext(ctx).Omit("Akun.Email", "Akun.Password").Create(req.MapRequest()).Error; err != nil {
 		return checkAlumniDBError(err.Error())
-	}
-
-	if err := tx.Commit().Error; err != nil {
-		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
 	return util.SuccessResponse(c, http.StatusOK, nil)
@@ -203,7 +197,6 @@ func EditAlumniHandler(c echo.Context) error {
 
 	req := &request.EditAlumni{}
 	db := database.InitMySQL()
-	tx := db.Begin()
 	ctx := c.Request().Context()
 
 	if err := c.Bind(req); err != nil {
@@ -214,13 +207,8 @@ func EditAlumniHandler(c echo.Context) error {
 		return err
 	}
 
-	if err := tx.WithContext(ctx).Where("id", id).Updates(req.MapRequest()).Error; err != nil {
-		tx.Rollback()
+	if err := db.WithContext(ctx).Where("id", id).Updates(req.MapRequest()).Error; err != nil {
 		return checkAlumniDBError(err.Error())
-	}
-
-	if err := tx.Commit().Error; err != nil {
-		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
 	return util.SuccessResponse(c, http.StatusOK, nil)
