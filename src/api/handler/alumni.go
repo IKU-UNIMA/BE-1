@@ -21,6 +21,7 @@ type alumniQueryParam struct {
 	TahunLulus int    `query:"tahun_lulus"`
 	Nim        string `query:"nim"`
 	Nama       string `query:"nama"`
+	Page       int    `query:"page"`
 }
 
 const getAlumniQuery = `
@@ -39,6 +40,7 @@ func GetAllAlumniHandler(c echo.Context) error {
 	db := database.InitMySQL()
 	ctx := c.Request().Context()
 	data := []response.Alumni{}
+	limit := 20
 	conds := ""
 
 	if queryParams.Nim != "" {
@@ -69,12 +71,21 @@ func GetAllAlumniHandler(c echo.Context) error {
 		conds = " WHERE " + conds
 	}
 
-	query := getAlumniQuery + conds
-	if err := db.WithContext(ctx).Raw(query).Find(&data).Error; err != nil {
+	offset := 0
+	if queryParams.Page > 1 {
+		offset = util.CountOffset(queryParams.Page, limit)
+	}
+
+	pagination := fmt.Sprintf("LIMIT %d,%d", offset, limit)
+	query := getAlumniQuery + conds + pagination
+	if err := db.WithContext(ctx).Debug().Raw(query).Find(&data).Error; err != nil {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
-	return util.SuccessResponse(c, http.StatusOK, data)
+	return util.SuccessResponse(c, http.StatusOK, util.Pagination{
+		Page: queryParams.Page,
+		Data: data,
+	})
 }
 
 func GetAlumniByIdHandler(c echo.Context) error {
