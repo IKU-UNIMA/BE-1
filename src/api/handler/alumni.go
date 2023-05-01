@@ -41,6 +41,7 @@ func GetAllAlumniHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 	data := []response.Alumni{}
 	limit := 20
+	order := " ORDER BY tahun_lulus DESC"
 	conds := ""
 
 	if queryParams.Nim != "" {
@@ -51,6 +52,7 @@ func GetAllAlumniHandler(c echo.Context) error {
 		}
 
 		if queryParams.TahunLulus != 0 {
+			order = ""
 			if conds != "" {
 				conds += fmt.Sprintf(" AND tahun_lulus = %d", queryParams.TahunLulus)
 			} else {
@@ -68,7 +70,7 @@ func GetAllAlumniHandler(c echo.Context) error {
 	}
 
 	if conds != "" {
-		conds = " WHERE " + conds
+		conds = "WHERE " + conds
 	}
 
 	offset := 0
@@ -76,9 +78,9 @@ func GetAllAlumniHandler(c echo.Context) error {
 		offset = util.CountOffset(queryParams.Page, limit)
 	}
 
-	pagination := fmt.Sprintf("LIMIT %d,%d", offset, limit)
-	query := getAlumniQuery + conds + pagination
-	if err := db.WithContext(ctx).Debug().Raw(query).Find(&data).Error; err != nil {
+	pagination := fmt.Sprintf(" LIMIT %d,%d", offset, limit)
+	query := getAlumniQuery + conds + order + pagination
+	if err := db.WithContext(ctx).Raw(query).Find(&data).Error; err != nil {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
