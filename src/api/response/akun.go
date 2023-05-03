@@ -1,5 +1,5 @@
 package response
 
-type Login struct {
+type Akun struct {
 	Token string `json:"token"`
 }
