@@ -53,7 +53,7 @@ func LoginHandler(c echo.Context) error {
 
 	token := util.GenerateJWT(data.ID, nama, data.Role, bagian)
 
-	return util.SuccessResponse(c, http.StatusOK, response.Login{Token: token})
+	return util.SuccessResponse(c, http.StatusOK, response.Akun{Token: token})
 }
 
 func CheckNIMHandler(c echo.Context) error {
@@ -106,11 +106,12 @@ func RegisterAlumniHandler(c echo.Context) error {
 	db := database.InitMySQL()
 	ctx := c.Request().Context()
 	alumni := struct {
-		ID  int
-		Nim string
+		ID   int
+		Nim  string
+		Nama string
 	}{}
 
-	if err := db.WithContext(ctx).Table("alumni").Select("id", "nim").Where("nim", req.Nim).Scan(&alumni).Error; err != nil {
+	if err := db.WithContext(ctx).Table("alumni").Select("id", "nim", "nama").Where("nim", req.Nim).Scan(&alumni).Error; err != nil {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
@@ -145,7 +146,9 @@ func RegisterAlumniHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
-	return util.SuccessResponse(c, http.StatusOK, nil)
+	token := util.GenerateJWT(alumni.ID, alumni.Nama, util.ALUMNI, "")
+
+	return util.SuccessResponse(c, http.StatusOK, response.Akun{Token: token})
 }
 
 func ChangePasswordHandler(c echo.Context) error {
