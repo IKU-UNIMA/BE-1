@@ -105,6 +105,7 @@ func RegisterAlumniHandler(c echo.Context) error {
 
 	db := database.InitMySQL()
 	ctx := c.Request().Context()
+	tx := db.Begin()
 	alumni := struct {
 		ID   int
 		Nim  string
@@ -128,7 +129,7 @@ func RegisterAlumniHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
-	akun := req.MapRequest()
+	akun := req.MapRequestToAkun()
 
 	query := fmt.Sprintf(`
 		UPDATE akun
@@ -138,12 +139,34 @@ func RegisterAlumniHandler(c echo.Context) error {
 		WHERE akun.id = %d;
 	`, akun.Email, akun.Password, alumni.ID)
 
-	if err := db.WithContext(ctx).Exec(query).Error; err != nil {
+	if err := tx.WithContext(ctx).Exec(query).Error; err != nil {
+		tx.Rollback()
 		if strings.Contains(err.Error(), util.UNIQUE_ERROR) {
 			return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": "email sudah digunakan"})
 		}
 
 		return util.FailedResponse(http.StatusInternalServerError, nil)
+	}
+
+	if err := tx.WithContext(ctx).Where("id", alumni.ID).Updates(req.MapRequestToAlumni()).Error; err != nil {
+		tx.Rollback()
+		if strings.Contains(err.Error(), "npwp") {
+			return util.FailedResponse(http.StatusBadRequest, map[string]string{
+				"message": "npwp sudah digunakan",
+			})
+		}
+
+		if strings.Contains(err.Error(), "nik") {
+			return util.FailedResponse(http.StatusBadRequest, map[string]string{
+				"message": "npwp sudah digunakan",
+			})
+		}
+
+		return util.FailedResponse(http.StatusInternalServerError, nil)
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
 	token := util.GenerateJWT(alumni.ID, alumni.Nama, util.ALUMNI, "")
