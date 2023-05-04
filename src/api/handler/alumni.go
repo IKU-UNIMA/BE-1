@@ -25,9 +25,8 @@ type alumniQueryParam struct {
 }
 
 const getAlumniQuery = `
-	SELECT alumni.id, prodi.nama AS prodi, nim, alumni.nama, akun.email, hp, tahun_lulus, npwp, nik 
-	FROM alumni 
-	JOIN akun ON alumni.id = akun.id 
+	SELECT alumni.id, prodi.nama AS prodi, nim, alumni.nama, email, hp, tahun_lulus, npwp, nik 
+	FROM alumni
 	JOIN prodi ON prodi.id = alumni.id_prodi
 	`
 
