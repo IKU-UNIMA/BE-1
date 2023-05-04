@@ -162,13 +162,10 @@ func ImportAlumniHandler(c echo.Context) error {
 			Nama:       rows[i][2],
 			Hp:         rows[i][3],
 			TahunLulus: uint(tahunLulus),
-			Akun: model.Akun{
-				Role: util.ALUMNI,
-			},
 		})
 	}
 
-	if err := db.WithContext(ctx).Omit("Akun.Email", "Akun.Password").Create(&data).Error; err != nil {
+	if err := db.WithContext(ctx).Create(&data).Error; err != nil {
 		if strings.Contains(err.Error(), "nim") {
 			return util.FailedResponse(
 				http.StatusBadRequest,
@@ -195,7 +192,7 @@ func InsertAlumniHandler(c echo.Context) error {
 		return err
 	}
 
-	if err := db.WithContext(ctx).Omit("Akun.Email", "Akun.Password").Create(req.MapRequest()).Error; err != nil {
+	if err := db.WithContext(ctx).Create(req.MapRequest()).Error; err != nil {
 		return checkAlumniDBError(err.Error())
 	}
 
