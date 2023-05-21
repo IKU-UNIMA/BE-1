@@ -11,6 +11,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/xuri/excelize/v2"
@@ -112,15 +113,17 @@ func ImportAlumniHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 	data := []model.Alumni{}
 
+	fileName := file.Filename + time.Now().String()
+
 	defer func() {
-		os.Remove(file.Filename)
+		os.Remove(fileName)
 	}()
 
-	if err := util.WriteFile(file); err != nil {
+	if err := util.WriteFile(file, fileName); err != nil {
 		return err
 	}
 
-	excel, err := excelize.OpenFile(file.Filename)
+	excel, err := excelize.OpenFile(fileName)
 	if err != nil {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}

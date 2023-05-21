@@ -16,7 +16,7 @@ func CheckFileIsExcel(file *multipart.FileHeader) error {
 	return FailedResponse(http.StatusBadRequest, map[string]string{"message": "unsupported file type for " + file.Filename})
 }
 
-func WriteFile(file *multipart.FileHeader) error {
+func WriteFile(file *multipart.FileHeader, fileName string) error {
 	if err := CheckFileIsExcel(file); err != nil {
 		return err
 	}
@@ -27,7 +27,7 @@ func WriteFile(file *multipart.FileHeader) error {
 	}
 	defer src.Close()
 
-	dst, err := os.Create(file.Filename)
+	dst, err := os.Create(fileName)
 	if err != nil {
 		return FailedResponse(http.StatusInternalServerError, nil)
 	}
