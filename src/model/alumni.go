@@ -7,7 +7,7 @@ type Alumni struct {
 	Nim        string  `gorm:"type:varchar(10);unique"`
 	Nama       string  `gorm:"type:varchar(255)"`
 	Hp         string  `gorm:"type:varchar(20)"`
-	Email      *string `gorm:"type:varchar(255);unique"`
+	Email      *string `gorm:"type:varchar(255)"`
 	TahunLulus uint    `gorm:"type:smallint"`
 	Npwp       *string `gorm:"type:varchar(255);unique"`
 	Nik        *int    `gorm:"unique"`
