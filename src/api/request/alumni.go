@@ -5,7 +5,7 @@ import (
 )
 
 type InsertAlumni struct {
-	KodeProdi  int    `json:"kode_prodi" validate:"required"`
+	IdProdi    int    `json:"id_prodi" validate:"required"`
 	Nim        string `json:"nim" validate:"required"`
 	Nama       string `json:"nama" validate:"required"`
 	Hp         string `json:"hp" validate:"required"`
@@ -13,7 +13,7 @@ type InsertAlumni struct {
 }
 
 type EditAlumni struct {
-	KodeProdi  int     `json:"kode_prodi" validate:"required"`
+	IdProdi    int     `json:"id_prodi" validate:"required"`
 	Nim        string  `json:"nim" validate:"required"`
 	Nama       string  `json:"nama" validate:"required"`
 	Hp         string  `json:"hp" validate:"required"`
@@ -25,7 +25,7 @@ type EditAlumni struct {
 
 func (r *InsertAlumni) MapRequest() *model.Alumni {
 	return &model.Alumni{
-		IdProdi:    r.KodeProdi,
+		IdProdi:    r.IdProdi,
 		KodePt:     "001035",
 		Nim:        r.Nim,
 		Nama:       r.Nama,
@@ -36,7 +36,7 @@ func (r *InsertAlumni) MapRequest() *model.Alumni {
 
 func (r *EditAlumni) MapRequest() *model.Alumni {
 	return &model.Alumni{
-		IdProdi:    r.KodeProdi,
+		IdProdi:    r.IdProdi,
 		Nim:        r.Nim,
 		Nama:       r.Nama,
 		Hp:         r.Hp,

@@ -2,7 +2,9 @@ package response
 
 type Alumni struct {
 	ID         int    `json:"id"`
-	Prodi      string `json:"prodi"`
+	IdProdi    int    `json:"-"`
+	KodePt     string `json:"kode_pt"`
+	Prodi      Prodi  `gorm:"foreignKey:IdProdi" json:"prodi"`
 	Nim        string `json:"nim"`
 	Nama       string `json:"nama"`
 	Email      string `json:"email"`
