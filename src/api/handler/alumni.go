@@ -62,8 +62,6 @@ func GetAllAlumniHandler(c echo.Context) error {
 		}
 	}
 
-	// pagination := fmt.Sprintf(" LIMIT %d,%d", offset, limit)
-	// query := getAlumniQuery + conds + order + pagination
 	if err := db.WithContext(ctx).Preload("Prodi").Where(conds).Order(order).
 		Offset(util.CountOffset(queryParams.Page, limit)).Limit(limit).
 		Find(&data).Error; err != nil {
