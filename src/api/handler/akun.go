@@ -56,43 +56,6 @@ func LoginHandler(c echo.Context) error {
 	return util.SuccessResponse(c, http.StatusOK, response.Akun{Token: token})
 }
 
-func CheckNIMHandler(c echo.Context) error {
-	req := &request.CheckNIM{}
-	if err := c.Bind(req); err != nil {
-		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
-	}
-
-	if err := c.Validate(req); err != nil {
-		return err
-	}
-
-	db := database.InitMySQL()
-	ctx := c.Request().Context()
-	alumni := struct {
-		ID  int
-		Nim string
-	}{}
-
-	if err := db.WithContext(ctx).Table("alumni").Select("id", "nim").Where("nim", req.Nim).Scan(&alumni).Error; err != nil {
-		return util.FailedResponse(http.StatusInternalServerError, nil)
-	}
-
-	if alumni.Nim != req.Nim {
-		return util.FailedResponse(http.StatusNotFound, map[string]string{"message": "data tidak ditemukan"})
-	}
-
-	conds := fmt.Sprintf("id = %d AND password IS NULL", alumni.ID)
-	if err := db.WithContext(ctx).First(new(model.Akun), conds).Error; err != nil {
-		if err.Error() == util.NOT_FOUND_ERROR {
-			return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": "akun sudah terdaftar"})
-		}
-
-		return util.FailedResponse(http.StatusInternalServerError, nil)
-	}
-
-	return util.SuccessResponse(c, http.StatusOK, req)
-}
-
 func RegisterAlumniHandler(c echo.Context) error {
 	req := &request.RegisterAlumni{}
 	if err := c.Bind(req); err != nil {

@@ -10,10 +10,6 @@ type Login struct {
 	Password string `json:"password" validate:"required"`
 }
 
-type CheckNIM struct {
-	Nim string `json:"nim" validate:"required"`
-}
-
 type RegisterAlumni struct {
 	Email    string  `json:"email" validate:"required,email"`
 	Password string  `json:"password" validate:"required"`
