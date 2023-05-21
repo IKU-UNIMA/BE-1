@@ -24,12 +24,6 @@ type alumniQueryParam struct {
 	Page       int    `query:"page"`
 }
 
-const getAlumniQuery = `
-	SELECT alumni.id, prodi.nama AS prodi, nim, alumni.nama, email, hp, tahun_lulus, npwp, nik 
-	FROM alumni
-	JOIN prodi ON prodi.id = alumni.id_prodi
-	`
-
 func GetAllAlumniHandler(c echo.Context) error {
 	queryParams := &alumniQueryParam{}
 	if err := (&echo.DefaultBinder{}).BindQueryParams(c, queryParams); err != nil {
@@ -40,7 +34,7 @@ func GetAllAlumniHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 	data := []response.Alumni{}
 	limit := 20
-	order := " ORDER BY tahun_lulus DESC"
+	order := "tahun_lulus DESC"
 	conds := ""
 
 	if queryParams.Nim != "" {
@@ -68,23 +62,16 @@ func GetAllAlumniHandler(c echo.Context) error {
 		}
 	}
 
-	if conds != "" {
-		conds = "WHERE " + conds
-	}
-
-	offset := 0
-	if queryParams.Page > 1 {
-		offset = util.CountOffset(queryParams.Page, limit)
-	}
-
-	pagination := fmt.Sprintf(" LIMIT %d,%d", offset, limit)
-	query := getAlumniQuery + conds + order + pagination
-	if err := db.WithContext(ctx).Raw(query).Find(&data).Error; err != nil {
+	// pagination := fmt.Sprintf(" LIMIT %d,%d", offset, limit)
+	// query := getAlumniQuery + conds + order + pagination
+	if err := db.WithContext(ctx).Preload("Prodi").Where(conds).Order(order).
+		Offset(util.CountOffset(queryParams.Page, limit)).Limit(limit).
+		Find(&data).Error; err != nil {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
 	var totalResult int64
-	if err := db.WithContext(ctx).Table("alumni").Count(&totalResult).Error; err != nil {
+	if err := db.WithContext(ctx).Table("alumni").Where(conds).Count(&totalResult).Error; err != nil {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
@@ -107,8 +94,7 @@ func GetAlumniByIdHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 	data := &response.Alumni{}
 
-	query := getAlumniQuery + fmt.Sprintf(" WHERE alumni.id = %d", id)
-	if err := db.WithContext(ctx).Raw(query).First(data).Error; err != nil {
+	if err := db.WithContext(ctx).Preload("Prodi").Where("id", id).First(data).Error; err != nil {
 		if err.Error() == util.NOT_FOUND_ERROR {
 			return util.FailedResponse(http.StatusNotFound, map[string]string{"message": "data alumni tidak ditemukan"})
 		}
@@ -152,9 +138,19 @@ func ImportAlumniHandler(c echo.Context) error {
 	}
 
 	for i := 1; i < len(rows); i++ {
-		idProdi, err := strconv.Atoi(rows[i][0])
+		kodeProdi, err := strconv.Atoi(rows[i][0])
 		if err != nil {
 			return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": fmt.Sprintf("kode prodi pada baris ke-%d tidak valid", i)})
+		}
+
+		idProdi := 0
+		if err := db.WithContext(ctx).Table("prodi").First(&idProdi, "kode_prodi", kodeProdi).Error; err != nil {
+			if err.Error() == util.NOT_FOUND_ERROR {
+				message := fmt.Sprintf("prodi dengan kode %d pada baris ke-%d tidak ditemukan", kodeProdi, i)
+				return util.FailedResponse(http.StatusNotFound, map[string]string{"message": message})
+			}
+
+			return util.FailedResponse(http.StatusInternalServerError, nil)
 		}
 
 		tahunLulus, err := strconv.ParseUint(rows[i][4], 10, 32)
@@ -253,6 +249,10 @@ func DeleteAlumniHandler(c echo.Context) error {
 }
 
 func checkAlumniDBError(err string) error {
+	if strings.Contains(err, "prodi") {
+		return util.FailedResponse(http.StatusNotFound, map[string]string{"message": "prodi tidak ditemukan"})
+	}
+
 	if strings.Contains(err, "nim") {
 		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": "nim sudah digunakan"})
 	}
