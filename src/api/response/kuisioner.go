@@ -52,7 +52,7 @@ type (
 		F25      int8   `json:"f25"`
 		F26      int8   `json:"f26"`
 		F27      int8   `json:"f27"`
-		F301     int8   `json:"f28"`
+		F301     int8   `json:"f301"`
 		F302     int    `json:"f302"`
 		F303     int    `json:"f303"`
 		F401     int8   `json:"f401"`
