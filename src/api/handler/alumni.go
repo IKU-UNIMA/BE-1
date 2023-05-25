@@ -11,7 +11,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/xuri/excelize/v2"
@@ -113,7 +112,7 @@ func ImportAlumniHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 	data := []model.Alumni{}
 
-	fileName := file.Filename + time.Now().String()
+	fileName := util.GetNewFileName(file.Filename)
 
 	defer func() {
 		os.Remove(fileName)
@@ -161,7 +160,7 @@ func ImportAlumniHandler(c echo.Context) error {
 
 		data = append(data, model.Alumni{
 			IdProdi:    idProdi,
-			KodePt:     util.KODE_PT,
+			KodePt:     "001035",
 			Nim:        rows[i][1],
 			Nama:       rows[i][2],
 			Hp:         rows[i][3],

@@ -1,10 +1,12 @@
 package util
 
 import (
+	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"os"
+	"time"
 )
 
 func CheckFileIsExcel(file *multipart.FileHeader) error {
@@ -38,4 +40,17 @@ func WriteFile(file *multipart.FileHeader, fileName string) error {
 	}
 
 	return nil
+}
+
+func GetNewFileName(name string) string {
+	fileName := ""
+	ext := ""
+	for i := 0; i < len(name); i++ {
+		if string(name[len(name)-i-1]) == "." {
+			fileName = name[:len(name)-i-1]
+			ext = name[len(name)-i-1:]
+		}
+	}
+
+	return fmt.Sprintf("%s%d%s", fileName, time.Now().Unix(), ext)
 }
