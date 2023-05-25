@@ -34,7 +34,6 @@ func InitServer() *echo.Echo {
 
 	akun := v1.Group("/akun")
 	akun.POST("/login", handler.LoginHandler)
-	akun.POST("/register/alumni/check", handler.CheckNIMHandler)
 	akun.POST("/register/alumni", handler.RegisterAlumniHandler)
 	akun.PATCH("/password/change", handler.ChangePasswordHandler, customMiddleware.Authentication)
 
@@ -59,6 +58,19 @@ func InitServer() *echo.Echo {
 	rektor.POST("", handler.InsertRektorHandler)
 	rektor.PUT("/:id", handler.EditRektorHandler)
 	rektor.DELETE("/:id", handler.DeleteRektorHandler)
+
+	kuisioner := v1.Group("/kuisioner")
+	kuisioner.GET("/check/:nim", handler.CheckKuisionerByNIMHandler)
+	kuisioner.POST("", handler.InsertKuisionerHandler)
+
+	kuisionerAuth := kuisioner.Group("", customMiddleware.Authentication, customMiddleware.GrantAdminIKU1)
+	kuisionerAuth.POST("/import", handler.ImportKuisionerHandler)
+	kuisionerAuth.GET("/export", handler.ExportKuisionerHandler)
+	kuisionerAuth.GET("", handler.GetAllKuisionerHandler)
+	kuisionerAuth.GET("/:id", handler.GetKuisionerByIDHandler)
+	kuisionerAuth.PUT("/:id", handler.EditKuisionerHandler)
+	kuisionerAuth.DELETE("/:id", handler.DeleteKuisionerHandler)
+	kuisionerAuth.PATCH("/:id/approve", handler.ApproveKuisionerHandler)
 
 	return app
 }
