@@ -84,6 +84,6 @@ type Kuisioner struct {
 	F1612     bool
 	F1613     bool
 	F1614     string `gorm:"type:varchar(255)"`
-	Status    *bool
+	Status    bool
 	CreatedAt time.Time
 }
