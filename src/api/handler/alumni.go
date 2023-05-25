@@ -161,7 +161,7 @@ func ImportAlumniHandler(c echo.Context) error {
 
 		data = append(data, model.Alumni{
 			IdProdi:    idProdi,
-			KodePt:     "001035",
+			KodePt:     util.KODE_PT,
 			Nim:        rows[i][1],
 			Nama:       rows[i][2],
 			Hp:         rows[i][3],
