@@ -203,26 +203,36 @@ func ImportKuisionerHandler(c echo.Context) error {
 		}
 
 		if idAlumni != 0 {
-			message := fmt.Sprintf("alumni dengan nim %s pada baris ke-%d sudah mengisi kuisioner", alumni.Nim, i)
-			return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
-		}
+			if err := tx.WithContext(ctx).Where("id", idAlumni).Updates(&alumni).Error; err != nil {
+				tx.Rollback()
+				if strings.Contains(err.Error(), "nik") {
+					message := fmt.Sprintf("NIK %d pada baris ke-%d sudah digunakan", *alumni.Nik, i)
+					return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
+				}
 
-		if err := tx.WithContext(ctx).Where("nim", alumni.Nim).Create(&alumni).Error; err != nil {
-			tx.Rollback()
-			if strings.Contains(err.Error(), "nik") {
-				message := fmt.Sprintf("NIK %d pada baris ke-%d sudah digunakan", *alumni.Nik, i)
-				return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
+				if strings.Contains(err.Error(), "npwp") {
+					message := fmt.Sprintf("NPWP %s pada baris ke-%d sudah digunakan", *alumni.Npwp, i)
+					return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
+				}
+			}
+		} else {
+			if err := tx.WithContext(ctx).Where("nim", alumni.Nim).Create(&alumni).Error; err != nil {
+				tx.Rollback()
+				if strings.Contains(err.Error(), "nik") {
+					message := fmt.Sprintf("NIK %d pada baris ke-%d sudah digunakan", *alumni.Nik, i)
+					return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
+				}
+
+				if strings.Contains(err.Error(), "npwp") {
+					message := fmt.Sprintf("NPWP %s pada baris ke-%d sudah digunakan", *alumni.Npwp, i)
+					return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
+				}
+
+				return util.FailedResponse(http.StatusInternalServerError, nil)
 			}
 
-			if strings.Contains(err.Error(), "nik") {
-				message := fmt.Sprintf("NPWP %s pada baris ke-%d sudah digunakan", *alumni.Npwp, i)
-				return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
-			}
-
-			return util.FailedResponse(http.StatusInternalServerError, nil)
+			idAlumni = alumni.ID
 		}
-
-		idAlumni = alumni.ID
 
 		f8, _ := strconv.Atoi(rows[i][9])
 		f504, _ := strconv.Atoi(rows[i][10])
@@ -380,6 +390,11 @@ func ImportKuisionerHandler(c echo.Context) error {
 
 		if err := tx.WithContext(ctx).Create(&data[i-1]).Error; err != nil {
 			tx.Rollback()
+			if strings.Contains(err.Error(), "id_alumni") {
+				message := fmt.Sprintf("alumni dengan nim %s pada baris ke-%d sudah mengisi kuisioner", alumni.Nim, i)
+				return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
+			}
+
 			return util.FailedResponse(http.StatusInternalServerError, nil)
 		}
 	}
