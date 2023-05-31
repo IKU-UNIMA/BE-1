@@ -28,6 +28,7 @@ func MigrateMySQL() {
 	InitMySQL().AutoMigrate(
 		&model.Provinsi{},
 		&model.KabKota{},
+		&model.Fakultas{},
 		&model.Prodi{},
 		&model.Kuisioner{},
 		&model.Alumni{},
