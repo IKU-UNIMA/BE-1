@@ -29,6 +29,9 @@ func InitServer() *echo.Echo {
 	kabKota := v1.Group("/kab-kota", customMiddleware.Authentication)
 	kabKota.GET("/provinsi/:id", handler.GetAllKabKotaByProvinsi)
 
+	fakultas := v1.Group("/fakultas", customMiddleware.Authentication)
+	fakultas.GET("", handler.GetAllFakultasHandler)
+
 	prodi := v1.Group("/prodi", customMiddleware.Authentication)
 	prodi.GET("", handler.GetAllProdiHandler)
 
