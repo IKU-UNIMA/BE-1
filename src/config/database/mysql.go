@@ -28,11 +28,13 @@ func MigrateMySQL() {
 	InitMySQL().AutoMigrate(
 		&model.Provinsi{},
 		&model.KabKota{},
+		&model.Fakultas{},
 		&model.Prodi{},
 		&model.Kuisioner{},
 		&model.Alumni{},
 		&model.Akun{},
 		&model.Admin{},
 		&model.Rektor{},
+		&model.Target{},
 	)
 }

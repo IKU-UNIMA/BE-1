@@ -1,6 +1,7 @@
 package util
 
 import (
+	"math"
 	"net/http"
 	"strconv"
 
@@ -15,6 +16,10 @@ func GetId(c echo.Context) (int, error) {
 	}
 
 	return id, nil
+}
+
+func RoundFloat(v float64) float64 {
+	return math.Round(v*100) / 100
 }
 
 func GetClaimsFromContext(c echo.Context) jwt.MapClaims {
