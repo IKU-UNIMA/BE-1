@@ -2,6 +2,7 @@ package request
 
 import (
 	"BE-1/src/model"
+	"BE-1/src/util"
 )
 
 type InsertAlumni struct {
@@ -26,7 +27,7 @@ type EditAlumni struct {
 func (r *InsertAlumni) MapRequest() *model.Alumni {
 	return &model.Alumni{
 		IdProdi:    r.IdProdi,
-		KodePt:     "001035",
+		KodePt:     util.KODE_PT,
 		Nim:        r.Nim,
 		Nama:       r.Nama,
 		Hp:         r.Hp,

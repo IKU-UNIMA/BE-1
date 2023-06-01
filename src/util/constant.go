@@ -16,4 +16,6 @@ const (
 	// bagian
 	UMUM = "UMUM"
 	IKU1 = "IKU 1"
+
+	KODE_PT = "001035"
 )
