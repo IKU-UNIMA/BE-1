@@ -75,5 +75,10 @@ func InitServer() *echo.Echo {
 	kuisionerAuth.DELETE("/:id", handler.DeleteKuisionerHandler)
 	kuisionerAuth.PATCH("/:id/approve", handler.ApproveKuisionerHandler)
 
+	dashboard := v1.Group("/dashboard", customMiddleware.Authentication)
+	dashboard.GET("/tahun/:tahun", handler.GetDashboardHandler, customMiddleware.GrantAdminIKU1AndRektor)
+	dashboard.GET("/fakultas/:fakultas/:tahun", handler.GetDashboardByFakultasHandler, customMiddleware.GrantAdminIKU1AndRektor)
+	dashboard.PATCH("/target", handler.InsertTargetHandler, customMiddleware.GrantAdminIKU1)
+
 	return app
 }
