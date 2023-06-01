@@ -82,6 +82,64 @@ func GetAllAlumniHandler(c echo.Context) error {
 	})
 }
 
+func GetAllAlumniBelumMengisiHandler(c echo.Context) error {
+	queryParams := &alumniQueryParam{}
+	if err := (&echo.DefaultBinder{}).BindQueryParams(c, queryParams); err != nil {
+		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
+	}
+
+	db := database.InitMySQL()
+	ctx := c.Request().Context()
+	data := []response.Alumni{}
+	limit := 20
+	order := "tahun_lulus DESC"
+	conds := "alumni.id NOT IN (SELECT id_alumni FROM kuisioner)"
+
+	if queryParams.Nim != "" {
+		conds = "nim = " + queryParams.Nim
+	} else {
+		if queryParams.Prodi != 0 {
+			conds = fmt.Sprintf("id_prodi = %d", queryParams.Prodi)
+		}
+
+		if queryParams.TahunLulus != 0 {
+			order = ""
+			if conds != "" {
+				conds += fmt.Sprintf(" AND tahun_lulus = %d", queryParams.TahunLulus)
+			} else {
+				conds = fmt.Sprintf("tahun_lulus = %d", queryParams.TahunLulus)
+			}
+		}
+
+		if queryParams.Nama != "" {
+			if conds != "" {
+				conds += " AND UPPER(alumni.nama) LIKE '%" + strings.ToUpper(queryParams.Nama) + "%'"
+			} else {
+				conds = "UPPER(alumni.nama) LIKE '%" + strings.ToUpper(queryParams.Nama) + "%'"
+			}
+		}
+	}
+
+	if err := db.WithContext(ctx).Preload("Prodi").Where(conds).Order(order).
+		Offset(util.CountOffset(queryParams.Page, limit)).Limit(limit).
+		Find(&data).Error; err != nil {
+		return util.FailedResponse(http.StatusInternalServerError, nil)
+	}
+
+	var totalResult int64
+	if err := db.WithContext(ctx).Table("alumni").Where(conds).Count(&totalResult).Error; err != nil {
+		return util.FailedResponse(http.StatusInternalServerError, nil)
+	}
+
+	return util.SuccessResponse(c, http.StatusOK, util.Pagination{
+		Limit:       limit,
+		Page:        queryParams.Page,
+		TotalPage:   util.CountTotalPage(int(totalResult), limit),
+		TotalResult: int(totalResult),
+		Data:        data,
+	})
+}
+
 func GetAlumniByIdHandler(c echo.Context) error {
 	id, err := util.GetId(c)
 	if err != nil {

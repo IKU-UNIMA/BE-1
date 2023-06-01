@@ -49,6 +49,7 @@ func InitServer() *echo.Echo {
 
 	alumni := v1.Group("/alumni", customMiddleware.Authentication, customMiddleware.GrantAdminIKU1)
 	alumni.GET("", handler.GetAllAlumniHandler)
+	alumni.GET("/belum-mengisi", handler.GetAllAlumniBelumMengisiHandler)
 	alumni.GET("/:id", handler.GetAlumniByIdHandler)
 	alumni.POST("", handler.InsertAlumniHandler)
 	alumni.POST("/import", handler.ImportAlumniHandler)
