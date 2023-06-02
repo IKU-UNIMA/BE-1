@@ -29,7 +29,7 @@ func GetDashboardHandler(c echo.Context) error {
 	var target float64
 	targetQuery := fmt.Sprintf(`
 	SELECT target FROM target
-	WHERE bagian = 'IKU 6' AND tahun = %d
+	WHERE bagian = 'IKU 1' AND tahun = %d
 	`, params.Tahun)
 	if err := db.WithContext(ctx).Raw(targetQuery).Find(&target).Error; err != nil {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
