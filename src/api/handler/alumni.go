@@ -202,7 +202,7 @@ func ImportAlumniHandler(c echo.Context) error {
 		}
 
 		idProdi := 0
-		if err := db.WithContext(ctx).Table("prodi").First(&idProdi, "kode_prodi", kodeProdi).Error; err != nil {
+		if err := db.WithContext(ctx).Model(new(model.Prodi)).Select("id").First(&idProdi, "kode_prodi", kodeProdi).Error; err != nil {
 			if err.Error() == util.NOT_FOUND_ERROR {
 				message := fmt.Sprintf("prodi dengan kode %d pada baris ke-%d tidak ditemukan", kodeProdi, i)
 				return util.FailedResponse(http.StatusNotFound, map[string]string{"message": message})
