@@ -159,6 +159,10 @@ func ImportKuisionerHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
+	if len(rows[0]) != 88 {
+		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": "jumlah kolom tidak sesuai format"})
+	}
+
 	for i := 1; i < len(rows); i++ {
 		kdProdi := rows[i][1]
 		idProdi := 0
