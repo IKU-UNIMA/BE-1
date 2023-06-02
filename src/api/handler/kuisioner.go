@@ -303,6 +303,10 @@ func ImportKuisionerHandler(c echo.Context) error {
 		f1611, _ := strconv.Atoi(rows[i][84])
 		f1612, _ := strconv.Atoi(rows[i][85])
 		f1613, _ := strconv.Atoi(rows[i][86])
+		f1614 := ""
+		if len(rows[i]) == 88 {
+			f1614 = rows[i][87]
+		}
 
 		kuisioner := &request.EditKuisioner{
 			F8:    int8(f8),
@@ -382,21 +386,27 @@ func ImportKuisionerHandler(c echo.Context) error {
 			F1611: int8(f1611),
 			F1612: int8(f1612),
 			F1613: int8(f1613),
-			F1614: rows[i][87],
+			F1614: f1614,
 		}
 
 		data = append(data, *kuisioner.MapRequest())
 		data[i-1].IdAlumni = idAlumni
+	}
 
-		if err := tx.WithContext(ctx).Create(&data[i-1]).Error; err != nil {
-			tx.Rollback()
-			if strings.Contains(err.Error(), "id_alumni") {
-				message := fmt.Sprintf("alumni dengan nim %s pada baris ke-%d sudah mengisi kuisioner", alumni.Nim, i)
-				return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
+	if err := tx.WithContext(ctx).Create(&data).Error; err != nil {
+		tx.Rollback()
+		if strings.Contains(err.Error(), "id_alumni") {
+			idAlumni := strings.Split(err.Error(), "'")[1]
+			nim := ""
+			if err := db.WithContext(ctx).Table("alumni").Select("nim").Where("id", idAlumni).Find(&nim).Error; err != nil {
+				return util.FailedResponse(http.StatusInternalServerError, nil)
 			}
 
-			return util.FailedResponse(http.StatusInternalServerError, nil)
+			message := fmt.Sprintf("alumni dengan nim %s sudah mengisi kuisioner", nim)
+			return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": message})
 		}
+
+		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
 	if err := tx.Commit().Error; err != nil {
