@@ -596,7 +596,7 @@ func InsertKuisionerHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	idAlumni := 0
-	if err := db.WithContext(ctx).Model(new(model.Alumni)).Select("id").First(&idAlumni).Error; err != nil {
+	if err := db.WithContext(ctx).Model(new(model.Alumni)).Select("id").Where("nim", req.Nim).First(&idAlumni).Error; err != nil {
 		if err.Error() == util.NOT_FOUND_ERROR {
 			return util.FailedResponse(http.StatusNotFound, map[string]string{"message": "alumni tidak ditemukan"})
 		}
