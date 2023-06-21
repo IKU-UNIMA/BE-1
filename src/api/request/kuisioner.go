@@ -12,17 +12,17 @@ type (
 		Email *string `json:"email" validate:"required,email"`
 		Hp    string  `json:"hp" validate:"required"`
 		F8    int8    `json:"f8" validate:"required,min=1,max=5"`
-		F504  int8    `json:"f504" validate:"min=1,max=2"`
+		F504  int8    `json:"f504" validate:"required,min=1,max=2"`
 		F502  int8    `json:"f502" validate:"min=0"`
 		F505  int32   `json:"505" validate:"min=0"`
 		F5a1  int32   `json:"5a1"`
 		F5a2  int32   `json:"f5a2"`
-		F1101 int8    `json:"f1101" validate:"min=1,max=7"`
+		F1101 int8    `json:"f1101" validate:"required,min=1,max=7"`
 		F1102 string  `json:"f1102"`
 		F5b   string  `json:"f5b"`
-		F5c   int8    `json:"f5c" validate:"min=1,max=4"`
-		F5d   int8    `json:"f5d" validate:"min=1,max=3"`
-		F18a  int8    `json:"f18a" validate:"min=1,max=2"`
+		F5c   int8    `json:"f5c" validate:"required,min=1,max=4"`
+		F5d   int8    `json:"f5d" validate:"required,min=1,max=3"`
+		F18a  int8    `json:"f18a" validate:"required,min=1,max=2"`
 		F18b  string  `json:"f18b"`
 		F18c  string  `json:"f18c"`
 		F18d  string  `json:"f18d"`
@@ -44,14 +44,14 @@ type (
 		F1772 int8    `json:"f1772" validate:"required,min=1,max=5"`
 		F1773 int8    `json:"f1773" validate:"required,min=1,max=5"`
 		F1774 int8    `json:"f1774" validate:"required,min=1,max=5"`
-		F21   int8    `json:"f21" validate:"min=1,max=5"`
-		F22   int8    `json:"f22" validate:"min=1,max=5"`
-		F23   int8    `json:"f23" validate:"min=1,max=5"`
-		F24   int8    `json:"f24" validate:"min=1,max=5"`
-		F25   int8    `json:"f25" validate:"min=1,max=5"`
-		F26   int8    `json:"f26" validate:"min=1,max=5"`
-		F27   int8    `json:"f27" validate:"min=1,max=5"`
-		F301  int8    `json:"f301" validate:"min=1,max=3"`
+		F21   int8    `json:"f21" validate:"required,min=1,max=5"`
+		F22   int8    `json:"f22" validate:"required,min=1,max=5"`
+		F23   int8    `json:"f23" validate:"required,min=1,max=5"`
+		F24   int8    `json:"f24" validate:"required,min=1,max=5"`
+		F25   int8    `json:"f25" validate:"required,min=1,max=5"`
+		F26   int8    `json:"f26" validate:"required,min=1,max=5"`
+		F27   int8    `json:"f27" validate:"required,min=1,max=5"`
+		F301  int8    `json:"f301" validate:"required,min=1,max=3"`
 		F302  int8    `json:"f302" validate:"min=0"`
 		F303  int8    `json:"f303" validate:"min=0"`
 		F401  int8    `json:"f401" validate:"min=0,max=1"`
@@ -73,7 +73,7 @@ type (
 		F6    int16   `json:"f6" validate:"min=0"`
 		F7    int16   `json:"f7" validate:"min=0"`
 		F7a   int16   `json:"f7a" validate:"min=0"`
-		F1001 int8    `json:"f1001" validate:"min=1,max=5"`
+		F1001 int8    `json:"f1001" validate:"required,min=1,max=5"`
 		F1002 string  `json:"f1002"`
 		F1601 int8    `json:"f1601" validate:"min=0,max=1"`
 		F1602 int8    `json:"f1602" validate:"min=0,max=1"`
@@ -98,12 +98,12 @@ type (
 		F505  int32  `json:"505" validate:"min=0"`
 		F5a1  int32  `json:"5a1"`
 		F5a2  int32  `json:"f5a2"`
-		F1101 int8   `json:"f1101" validate:"min=1,max=7"`
+		F1101 int8   `json:"f1101" validate:"required,min=1,max=7"`
 		F1102 string `json:"f1102"`
 		F5b   string `json:"f5b"`
-		F5c   int8   `json:"f5c" validate:"min=1,max=4"`
-		F5d   int8   `json:"f5d" validate:"min=1,max=3"`
-		F18a  int8   `json:"f18a" validate:"min=1,max=2"`
+		F5c   int8   `json:"f5c" validate:"required,min=1,max=4"`
+		F5d   int8   `json:"f5d" validate:"required,min=1,max=3"`
+		F18a  int8   `json:"f18a" validate:"required,min=1,max=2"`
 		F18b  string `json:"f18b"`
 		F18c  string `json:"f18c"`
 		F18d  string `json:"f18d"`
@@ -125,14 +125,14 @@ type (
 		F1772 int8   `json:"f1772" validate:"required,min=1,max=5"`
 		F1773 int8   `json:"f1773" validate:"required,min=1,max=5"`
 		F1774 int8   `json:"f1774" validate:"required,min=1,max=5"`
-		F21   int8   `json:"f21" validate:"min=1,max=5"`
-		F22   int8   `json:"f22" validate:"min=1,max=5"`
-		F23   int8   `json:"f23" validate:"min=1,max=5"`
-		F24   int8   `json:"f24" validate:"min=1,max=5"`
-		F25   int8   `json:"f25" validate:"min=1,max=5"`
-		F26   int8   `json:"f26" validate:"min=1,max=5"`
-		F27   int8   `json:"f27" validate:"min=1,max=5"`
-		F301  int8   `json:"f301" validate:"min=1,max=3"`
+		F21   int8   `json:"f21" validate:"required,min=1,max=5"`
+		F22   int8   `json:"f22" validate:"required,min=1,max=5"`
+		F23   int8   `json:"f23" validate:"required,min=1,max=5"`
+		F24   int8   `json:"f24" validate:"required,min=1,max=5"`
+		F25   int8   `json:"f25" validate:"required,min=1,max=5"`
+		F26   int8   `json:"f26" validate:"required,min=1,max=5"`
+		F27   int8   `json:"f27" validate:"required,min=1,max=5"`
+		F301  int8   `json:"f301" validate:"required,min=1,max=3"`
 		F302  int8   `json:"f302" validate:"min=0"`
 		F303  int8   `json:"f303" validate:"min=0"`
 		F401  int8   `json:"f401" validate:"min=0,max=1"`
@@ -154,7 +154,7 @@ type (
 		F6    int16  `json:"f6" validate:"min=0"`
 		F7    int16  `json:"f7" validate:"min=0"`
 		F7a   int16  `json:"f7a" validate:"min=0"`
-		F1001 int8   `json:"f1001" validate:"min=1,max=5"`
+		F1001 int8   `json:"f1001" validate:"required,min=1,max=5"`
 		F1002 string `json:"f1002"`
 		F1601 int8   `json:"f1601" validate:"min=0,max=1"`
 		F1602 int8   `json:"f1602" validate:"min=0,max=1"`
