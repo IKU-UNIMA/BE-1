@@ -449,6 +449,10 @@ func ExportKuisionerHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
+	if len(data) == 0 {
+		return util.FailedResponse(http.StatusNotFound, map[string]string{"message": "data tidak ditemukan"})
+	}
+
 	fileName := "data_responden.xlsx"
 	newFile := util.GetNewFileName(fileName)
 
