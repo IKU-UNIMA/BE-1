@@ -472,7 +472,7 @@ func ExportKuisionerHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
-	f, err := excelize.OpenFile(fileName)
+	f, err := excelize.OpenFile(newFile)
 	if err != nil {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
