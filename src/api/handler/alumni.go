@@ -96,27 +96,19 @@ func GetAllAlumniBelumMengisiHandler(c echo.Context) error {
 	conds := "alumni.id NOT IN (SELECT id_alumni FROM kuisioner)"
 
 	if queryParams.Nim != "" {
-		conds = "nim = " + queryParams.Nim
+		conds += " AND nim = " + queryParams.Nim
 	} else {
 		if queryParams.Prodi != 0 {
-			conds = fmt.Sprintf("id_prodi = %d", queryParams.Prodi)
+			conds += fmt.Sprintf(" AND id_prodi = %d", queryParams.Prodi)
 		}
 
 		if queryParams.TahunLulus != 0 {
 			order = ""
-			if conds != "" {
-				conds += fmt.Sprintf(" AND tahun_lulus = %d", queryParams.TahunLulus)
-			} else {
-				conds = fmt.Sprintf("tahun_lulus = %d", queryParams.TahunLulus)
-			}
+			conds += fmt.Sprintf(" AND tahun_lulus = %d", queryParams.TahunLulus)
 		}
 
 		if queryParams.Nama != "" {
-			if conds != "" {
-				conds += " AND UPPER(alumni.nama) LIKE '%" + strings.ToUpper(queryParams.Nama) + "%'"
-			} else {
-				conds = "UPPER(alumni.nama) LIKE '%" + strings.ToUpper(queryParams.Nama) + "%'"
-			}
+			conds += " AND UPPER(alumni.nama) LIKE '%" + strings.ToUpper(queryParams.Nama) + "%'"
 		}
 	}
 
