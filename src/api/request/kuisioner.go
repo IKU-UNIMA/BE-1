@@ -14,8 +14,8 @@ type (
 		F8    int8    `json:"f8" validate:"required,min=1,max=5"`
 		F504  int8    `json:"f504" validate:"required,min=1,max=2"`
 		F502  int8    `json:"f502" validate:"min=0"`
-		F505  int32   `json:"505" validate:"min=0"`
-		F5a1  int32   `json:"5a1"`
+		F505  int32   `json:"f505" validate:"min=0"`
+		F5a1  int32   `json:"f5a1"`
 		F5a2  int32   `json:"f5a2"`
 		F1101 int8    `json:"f1101" validate:"min=0,max=7"`
 		F1102 string  `json:"f1102"`
@@ -95,8 +95,8 @@ type (
 		F8    int8   `json:"f8" validate:"required,min=1,max=5"`
 		F504  int8   `json:"f504" validate:"min=1,max=2"`
 		F502  int8   `json:"f502" validate:"min=0"`
-		F505  int32  `json:"505" validate:"min=0"`
-		F5a1  int32  `json:"5a1"`
+		F505  int32  `json:"f505" validate:"min=0"`
+		F5a1  int32  `json:"f5a1"`
 		F5a2  int32  `json:"f5a2"`
 		F1101 int8   `json:"f1101" validate:"min=0,max=7"`
 		F1102 string `json:"f1102"`
