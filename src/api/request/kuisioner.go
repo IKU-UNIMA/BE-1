@@ -26,7 +26,7 @@ type (
 		F18b  string  `json:"f18b"`
 		F18c  string  `json:"f18c"`
 		F18d  string  `json:"f18d"`
-		F1201 int8    `json:"f1201" validate:"min=0,max=7"`
+		F1201 int8    `json:"f1201" validate:"required,min=1,max=7"`
 		F1202 string  `json:"f1202"`
 		F14   int8    `json:"f14" validate:"required,min=1,max=5"`
 		F15   int8    `json:"f15" validate:"required,min=1,max=4"`
@@ -107,7 +107,7 @@ type (
 		F18b  string `json:"f18b"`
 		F18c  string `json:"f18c"`
 		F18d  string `json:"f18d"`
-		F1201 int8   `json:"f1201" validate:"min=0,max=7"`
+		F1201 int8   `json:"f1201" validate:"required,min=1,max=7"`
 		F1202 string `json:"f1202"`
 		F14   int8   `json:"f14" validate:"required,min=1,max=5"`
 		F15   int8   `json:"f15" validate:"required,min=1,max=4"`
