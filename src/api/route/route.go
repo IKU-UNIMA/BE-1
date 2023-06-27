@@ -23,10 +23,10 @@ func InitServer() *echo.Echo {
 
 	v1 := app.Group("/api/v1")
 
-	provinsi := v1.Group("/provinsi", customMiddleware.Authentication)
+	provinsi := v1.Group("/provinsi")
 	provinsi.GET("", handler.GetAllProvinsiHandler)
 
-	kabKota := v1.Group("/kab-kota", customMiddleware.Authentication)
+	kabKota := v1.Group("/kab-kota")
 	kabKota.GET("/provinsi/:id", handler.GetAllKabKotaByProvinsi)
 
 	fakultas := v1.Group("/fakultas", customMiddleware.Authentication)
