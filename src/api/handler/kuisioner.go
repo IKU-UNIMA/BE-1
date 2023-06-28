@@ -103,7 +103,13 @@ func GetAllKuisionerHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusInternalServerError, nil)
 	}
 
-	return util.SuccessResponse(c, http.StatusOK, data)
+	return util.SuccessResponse(c, http.StatusOK, util.Pagination{
+		Limit:       queryParams.Limit,
+		Page:        queryParams.Page,
+		TotalPage:   util.CountTotalPage(int(totalResult), queryParams.Limit),
+		TotalResult: int(totalResult),
+		Data:        data,
+	})
 }
 
 func GetKuisionerByIDHandler(c echo.Context) error {
