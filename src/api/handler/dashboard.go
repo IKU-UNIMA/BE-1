@@ -22,7 +22,7 @@ func GetDashboardHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := &response.Dashboard{}
 
@@ -81,7 +81,7 @@ func GetDashboardByFakultasHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := &response.DashboardPerProdi{}
 
@@ -144,7 +144,7 @@ func InsertTargetHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	conds := fmt.Sprintf("bagian='%s' AND tahun=%d", util.IKU1, req.Tahun)
 

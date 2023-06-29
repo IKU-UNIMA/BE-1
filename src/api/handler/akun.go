@@ -23,7 +23,7 @@ func LoginHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := &model.Akun{}
 
@@ -66,7 +66,7 @@ func RegisterAlumniHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	tx := db.Begin()
 	alumni := struct {
@@ -147,7 +147,7 @@ func ChangePasswordHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	claims := util.GetClaimsFromContext(c)
 	id := int(claims["id"].(float64))

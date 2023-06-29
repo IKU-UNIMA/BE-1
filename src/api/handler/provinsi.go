@@ -10,7 +10,7 @@ import (
 )
 
 func GetAllProvinsiHandler(c echo.Context) error {
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := []response.Provinsi{}
 
