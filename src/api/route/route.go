@@ -66,7 +66,7 @@ func InitServer() *echo.Echo {
 	kuisioner.POST("", handler.InsertKuisionerHandler)
 	kuisioner.POST("/import", handler.ImportKuisionerHandler, customMiddleware.Authentication, customMiddleware.GrantAdminIKU1)
 	kuisioner.GET("/export", handler.ExportKuisionerHandler, customMiddleware.Authentication, customMiddleware.GrantAdminIKU1)
-	kuisioner.GET("", handler.GetAllKuisionerHandler, customMiddleware.Authentication, customMiddleware.GrantAdminIKU1)
+	kuisioner.GET("", handler.GetAllKuisionerHandler)
 	kuisioner.GET("/:id", handler.GetKuisionerByIDHandler, customMiddleware.Authentication, customMiddleware.GrantAdminIKU1)
 	kuisioner.PUT("/:id", handler.EditKuisionerHandler, customMiddleware.Authentication, customMiddleware.GrantAdminIKU1)
 	kuisioner.DELETE("/:id", handler.DeleteKuisionerHandler, customMiddleware.Authentication, customMiddleware.GrantAdminIKU1)
