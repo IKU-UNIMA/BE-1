@@ -59,6 +59,10 @@ func GetAllKuisionerHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
+	if queryParams.Limit < 1 {
+		queryParams.Limit = 20
+	}
+
 	conds := ""
 	if queryParams.Nim != "" {
 		conds = "alumni.nim = " + queryParams.Nim
