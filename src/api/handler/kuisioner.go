@@ -29,7 +29,7 @@ type kuisionerQueryParam struct {
 func CheckKuisionerByNIMHandler(c echo.Context) error {
 	nim := c.Param("nim")
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	alumni := &response.Alumni{}
 
@@ -88,7 +88,7 @@ func GetAllKuisionerHandler(c echo.Context) error {
 		}
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := []response.Kuisioner{}
 
@@ -122,7 +122,7 @@ func GetKuisionerByIDHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := &response.DetailKuisioner{}
 
@@ -143,7 +143,7 @@ func ImportKuisionerHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	tx := db.Begin()
 	ctx := c.Request().Context()
 	data := []model.Kuisioner{}
@@ -449,7 +449,7 @@ func ExportKuisionerHandler(c echo.Context) error {
 		}
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := []response.DetailKuisioner{}
 
@@ -605,7 +605,7 @@ func InsertKuisionerHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	tx := db.Begin()
 	ctx := c.Request().Context()
 
@@ -666,7 +666,7 @@ func EditKuisionerHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 
 	if err := db.WithContext(ctx).Where("id", id).Updates(req.MapRequest()).Error; err != nil {
@@ -682,7 +682,7 @@ func DeleteKuisionerHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 
 	query := db.WithContext(ctx).Delete(new(model.Kuisioner), "id", id)
@@ -703,7 +703,7 @@ func ApproveKuisionerHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 
 	if err := db.WithContext(ctx).Where("id", id).Update("status", true).Error; err != nil {

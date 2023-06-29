@@ -30,7 +30,7 @@ func GetAllAlumniHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := []response.Alumni{}
 	limit := 20
@@ -88,7 +88,7 @@ func GetAllAlumniBelumMengisiHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := []response.Alumni{}
 	limit := 20
@@ -138,7 +138,7 @@ func GetAlumniByIdHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := &response.Alumni{}
 
@@ -158,7 +158,7 @@ func ImportAlumniHandler(c echo.Context) error {
 		return util.FailedResponse(http.StatusBadRequest, map[string]string{"message": err.Error()})
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 	data := []model.Alumni{}
 
@@ -234,7 +234,7 @@ func ImportAlumniHandler(c echo.Context) error {
 
 func InsertAlumniHandler(c echo.Context) error {
 	req := &request.InsertAlumni{}
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 
 	if err := c.Bind(req); err != nil {
@@ -259,7 +259,7 @@ func EditAlumniHandler(c echo.Context) error {
 	}
 
 	req := &request.EditAlumni{}
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 
 	if err := c.Bind(req); err != nil {
@@ -283,7 +283,7 @@ func DeleteAlumniHandler(c echo.Context) error {
 		return err
 	}
 
-	db := database.InitMySQL()
+	db := database.DB
 	ctx := c.Request().Context()
 
 	query := db.WithContext(ctx).Delete(new(model.Alumni), id)
